@@ -54,6 +54,15 @@ module.exports = {
     // Docs: https://www.gatsbyjs.org/packages/gatsby-plugin-offline/
     // `gatsby-plugin-offline`,
     {
+      resolve: `gatsby-plugin-react-i18next`,
+      options: {
+        path: `${__dirname}/locale`,
+        languages: [`en`, `cs`],
+        defaultLanguage: `cs`,
+        redirect: false,
+      },
+    },
+    {
       resolve: `gatsby-source-cd-airtable`,
       options: {
         projectsTableName: 'Projects',
