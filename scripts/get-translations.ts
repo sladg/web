@@ -7,9 +7,9 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 enum AirTableColumn {
+  Key = 'id',
   Czech = 'cz',
   English = 'en',
-  Key = 'id',
 }
 interface AirtableStructure {
   [AirTableColumn.Key]: string
@@ -17,14 +17,19 @@ interface AirtableStructure {
   [AirTableColumn.English]: string
 }
 
+const config = {
+  key: process.env.AIRTABLE_TRANSLATION_KEY,
+  base: process.env.AIRTABLE_TRANSLATION_BASE,
+  base_name: process.env.AIRTABLE_TRANSLATION_BASE_NAME || 'Translations',
+  view: process.env.AIRTABLE_TRANSLATION_VIEW || 'Grid view',
+}
+
 type MappedTranslations = { lang: string; key: string; translation: string }
 
-const base = new Airtable({
-  apiKey: process.env.AIRTABLE_TRANSLATION_KEY,
-}).base(process.env.AIRTABLE_TRANSLATION_BASE)
+const base = new Airtable({ apiKey: config.key }).base(config.base)
 
 const getAirtableRecords = async () =>
-  base('Translations').select({ view: 'Grid view' }).all()
+  base(config.base_name).select({ view: config.view }).all()
 
 // Gets plain JS object from Airtable structure.
 const getPlainObjectFromRecord = (data: Record[]): AirtableStructure[] =>
@@ -60,7 +65,11 @@ const createNestedTranslations = (data: MappedTranslations[]) =>
 // Write for all files. Language is always top key.
 const writeFilesForLanguages = (data) =>
   Object.entries(data).forEach(([language, values]) =>
-    writeFileSync(`./locale/${language}.json`, JSON.stringify(values), 'utf8')
+    writeFileSync(
+      `./locale/${language}/translation.json`,
+      JSON.stringify(values),
+      'utf8'
+    )
   )
 
 const run = async () => {
