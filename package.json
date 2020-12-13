@@ -17,7 +17,6 @@
     "lint": "eslint './{src,stories}/**/*.{ts,tsx,js,jsx}'",
     "lint:fix": "eslint --fix './{src,stories}/**/*.{ts,tsx,js,jsx}'",
     "test": "jest",
-    "extract": "yarn run babel --config-file ./babel-extract.config.js -o tmp/chunk.js 'src/**/*.{js,jsx,ts,tsx}' && rm -rf tmp",
     "storybook": "NODE_ENV=production start-storybook -s ./static -p 6060 -c .storybook watch-css",
     "build-storybook": "gatsby build && NODE_ENV=production build-storybook -s ./static",
     "cy:run": "cypress run",
