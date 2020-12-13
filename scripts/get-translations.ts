@@ -1,7 +1,7 @@
 import Airtable from 'airtable'
 import Record from 'airtable/lib/record'
 import { set as lodashSet } from 'lodash'
-import { writeFileSync } from 'fs'
+import { writeFileSync, existsSync, mkdirSync } from 'fs'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -22,6 +22,10 @@ const config = {
   base: process.env.AIRTABLE_TRANSLATION_BASE,
   base_name: process.env.AIRTABLE_TRANSLATION_BASE_NAME || 'Translations',
   view: process.env.AIRTABLE_TRANSLATION_VIEW || 'Grid view',
+}
+
+if (!config.key || !config.base) {
+  throw new Error('Env variables not specified!')
 }
 
 type MappedTranslations = { lang: string; key: string; translation: string }
@@ -63,14 +67,18 @@ const createNestedTranslations = (data: MappedTranslations[]) =>
   )
 
 // Write for all files. Language is always top key.
-const writeFilesForLanguages = (data) =>
-  Object.entries(data).forEach(([language, values]) =>
-    writeFileSync(
-      `./locale/${language}/translation.json`,
-      JSON.stringify(values),
-      'utf8'
-    )
-  )
+// eslint-disable-next-line @typescript-eslint/ban-types
+const writeFilesForLanguages = (data: object) =>
+  Object.entries(data).forEach(([language, values]) => {
+    const folderName = `./locale/${language}`
+    const fileName = `${folderName}/translation.json`
+
+    if (!existsSync(folderName)) {
+      mkdirSync(folderName)
+    }
+
+    writeFileSync(fileName, JSON.stringify(values), 'utf8')
+  })
 
 const run = async () => {
   try {
@@ -81,6 +89,7 @@ const run = async () => {
 
     writeFilesForLanguages(nestedTranslations)
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e)
     throw new Error('Error has occured.')
   }
