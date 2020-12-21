@@ -89,7 +89,6 @@ const run = async () => {
 
     writeFilesForLanguages(nestedTranslations)
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e)
     throw new Error('Error has occured.')
   }
