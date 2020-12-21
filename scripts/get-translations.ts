@@ -1,8 +1,8 @@
 import Airtable from 'airtable'
-import Record from 'airtable/lib/record'
 import { set as lodashSet } from 'lodash'
 import { writeFileSync, existsSync, mkdirSync } from 'fs'
 import dotenv from 'dotenv'
+import { default as AirtableRecord } from 'airtable/lib/record'
 
 dotenv.config()
 
@@ -18,30 +18,37 @@ interface AirtableStructure {
 }
 
 const config = {
-  key: process.env.AIRTABLE_TRANSLATION_KEY,
-  base: process.env.AIRTABLE_TRANSLATION_BASE,
-  base_name: process.env.AIRTABLE_TRANSLATION_BASE_NAME || 'Translations',
-  view: process.env.AIRTABLE_TRANSLATION_VIEW || 'Grid view',
+  KEY: process.env.AIRTABLE_TRANSLATION_KEY,
+  BASE_ID: process.env.AIRTABLE_TRANSLATION_BASE,
+  TABLE_NAME: process.env.AIRTABLE_TRANSLATION_BASE_NAME || 'Translations',
+  VIEW: process.env.AIRTABLE_TRANSLATION_VIEW || 'Grid view',
 }
 
-if (!config.key || !config.base) {
-  throw new Error('Env variables not specified!')
+interface MappedTranslations {
+  lang: string
+  key: string
+  translation: string
 }
 
-type MappedTranslations = { lang: string; key: string; translation: string }
+const getAirtableRecords = async (): Promise<AirtableRecord[]> => {
+  if (!config.KEY || !config.BASE_ID) {
+    throw new Error('Env variables not specified!')
+  }
 
-const base = new Airtable({ apiKey: config.key }).base(config.base)
-
-const getAirtableRecords = async () =>
-  base(config.base_name).select({ view: config.view }).all()
+  return new Airtable({ apiKey: config.KEY })
+    .base(config.BASE_ID)(config.TABLE_NAME)
+    .select({ view: config.VIEW })
+    .all()
+}
 
 // Gets plain JS object from Airtable structure.
-const getPlainObjectFromRecord = (data: Record[]): AirtableStructure[] =>
-  data.map((record) => record._rawJson.fields)
+const getPlainObjectFromRecord = (
+  data: AirtableRecord[]
+): AirtableStructure[] => data.map((record) => record._rawJson.fields)
 
 // Maps rows from Airtable to object arrays.
 const splitByLanguages = (data: AirtableStructure[]) =>
-  data.reduce((acc, row) => {
+  data.reduce<MappedTranslations[]>((acc, row) => {
     return [
       ...acc,
       {
@@ -56,7 +63,7 @@ const splitByLanguages = (data: AirtableStructure[]) =>
       },
       //   @NOTE: if adding new language, add here
     ]
-  }, [] as MappedTranslations[])
+  }, [])
 
 // Prefix the nesting with language.
 const createNestedTranslations = (data: MappedTranslations[]) =>
@@ -67,8 +74,7 @@ const createNestedTranslations = (data: MappedTranslations[]) =>
   )
 
 // Write for all files. Language is always top key.
-// eslint-disable-next-line @typescript-eslint/ban-types
-const writeFilesForLanguages = (data: object) =>
+const writeFilesForLanguages = (data: Record<string, unknown>) =>
   Object.entries(data).forEach(([language, values]) => {
     const folderName = `./locale/${language}`
     const fileName = `${folderName}/translation.json`
