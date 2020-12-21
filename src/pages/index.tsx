@@ -12,8 +12,8 @@ const IndexPage: React.FC = () => {
     <Layout>
       <Section>
         <SectionContent>
-          <h1>{t('translations:some.value.neco')}</h1>
-          <p>{t('translations:homepage.title')}</p>
+          <h1>{t('some.value')}</h1>
+          <p>{t('homepage')}</p>
         </SectionContent>
       </Section>
 

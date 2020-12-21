@@ -60,6 +60,9 @@ module.exports = {
         languages: [`en`, `cs`],
         defaultLanguage: `cs`,
         redirect: false,
+        i18nextOptions: {
+          defaultNS: 'translation',
+        },
       },
     },
     {

@@ -33,6 +33,9 @@
 
     Na [localhost:8000](http://localhost:8000) by měla běžet lokální verze webu a podporující live reload pro pohodlný vývoj.
 
+## Překlady
+[Dokumentace](./doc/translations.md)
+
 ## ⌨️ Základní příkazy
 
 `yarn start`: Start vývojového režimu
@@ -64,38 +67,3 @@ Zdroje jsou zveřejněny pod [licencí BSD 3-Clause](LICENSE).
 **Tech leads:** [Matěj 'Horm' Horák](https://github.com/HormCodes), [Míla Votradovec](https://github.com/miiila)
 
 **Wiki:** [Redesign webu Česko.Digital](https://wiki.cesko.digital/pages/viewpage.action?pageId=1574868)
-
-## Translations
-
-Překlady jsou realizovány pomocí `gatsby-plugin-react-i18next` ve spojení se Airtable. Airtable umožnuje vytvářet tabulky a databáze, ze kterých jsou překlady staženy pomocí skriptu `yarn translations:get`. Tento skript spustí `scripts/get-translations.ts`. V rámci tohoto skriptu je vytvořeno připojení do Airtable, staženy záznamy a vytvořeny JSON soubory ve složce `locale/`.
-
-V rámci aplikace lze tyto překlady použit pomocí `useTranslation` takto:
-
-```
-import { useTranslation } from 'gatsby-plugin-react-i18next'
-const { t } = useTranslation()
-t('translations:key.for.translation')
-```
-
-nebo
-
-```
-import { useTranslation } from 'gatsby-plugin-react-i18next'
-const { t } = useTranslation("translations")
-t('key.for.translation')
-```
-
-Pro spuštění skriptu a načtení překladů je nutné mít dostupné environment proměné. Jmenovitě:
-
-- AIRTABLE_TRANSLATION_KEY
-- AIRTABLE_TRANSLATION_BASE
-- AIRTABLE_TRANSLATION_VIEW (defaultně "Grid view")
-- AIRTABLE_TRANSLATION_BASE_NAME (defaultně "Translations")
-
-### Přidání jazyka
-
-Pro přidání jazyka je ve službe Airtable definovat nový sloupec, který bude identifikovat překlady pro daný jazyk. Následně v `scripts/get-translations` a `AirTableColumn` je nutné definovat nový klíč. V rámci `AirtableStructure` potom definovat tento klíč jako string. Dále ve funkci `splitByLanguages` je nutné přidat mapování pro tento nový jazyk.
-
-### Přidání překladu
-
-Pro přídání překladu je nutné ve službě Airtable přidat nový záznam s hodnotou `key` a překlady pro dané jazyky. Názvy sloupců pro dané jazyky je možné definovat v `scripts/get-translations` a `AirTableColumn`.

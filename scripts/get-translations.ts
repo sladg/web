@@ -8,7 +8,7 @@ dotenv.config()
 
 enum AirTableColumn {
   Key = 'id',
-  Czech = 'cz',
+  Czech = 'cs',
   English = 'en',
 }
 interface AirtableStructure {
