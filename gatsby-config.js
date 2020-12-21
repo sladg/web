@@ -54,6 +54,7 @@ module.exports = {
     // Docs: https://www.gatsbyjs.org/packages/gatsby-plugin-offline/
     // `gatsby-plugin-offline`,
     {
+      // Docs: https://www.gatsbyjs.com/plugins/gatsby-plugin-react-i18next/
       resolve: `gatsby-plugin-react-i18next`,
       options: {
         path: `${__dirname}/locale`,
