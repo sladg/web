@@ -37,10 +37,10 @@ Pro nastavení nové překladové databáze budeme postupovat následovně.
 - Vytvoříme novou tabulku "Create empty table".
 - Tabulce dáme název, který následně použijeme v `AIRTABLE_TRANSLATION_BASE_NAME` pro jednoduché nastavení pojmenute tabulku "Translations".
 - Smaženeme všechny předvytvořené sloupce a vytvoříme nové takto:
-    - id = sloupec určující klíč (typ: "single line text")
-    - en = sloupec s p5eklady angličtiny (typ: "single line text")
-    - cs = sloupec s překlady češtiny (typ: "single line text")
-    - a případně další sloupce pro překlady dalších jazyků ...
+  - id = sloupec určující klíč (typ: "single line text")
+  - en = sloupec s p5eklady angličtiny (typ: "single line text")
+  - cs = sloupec s překlady češtiny (typ: "single line text")
+  - a případně další sloupce pro překlady dalších jazyků ...
 - Ujistíme se, že existuje tabulkový pohled "Grid view". Můžeme použit vlastní název, který speficikujeme v `AIRTABLE_TRANSLATION_VIEW`.
 
 Poté co je nastavená datová vrstva potřebujeme získat přístupové klíče. Ty získáme v nastavení účtu a specifikujeme v rámci `AIRTABLE_TRANSLATION_KEY`.
@@ -48,4 +48,5 @@ Poté co je nastavená datová vrstva potřebujeme získat přístupové klíče
 Posledním krokem je specifikace workspace, klíč jednodušše získáme přes airtable.com/api.
 
 Ukázka nastavené databáze v Airtable:
-![Airtable překladová tabulka][images/translations-airtable-config.jpg]
+
+<figure><img src="images/translations-airtable-config.jpg"><figcaption>Airtable překladová tabulka</figcaption></figure>
